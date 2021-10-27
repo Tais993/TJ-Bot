@@ -1,5 +1,6 @@
 package org.togetherjava.tjbot.logwatcher.watcher;
 
+import org.jetbrains.annotations.Contract;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ public class StreamWatcher {
     private static final Map<UUID, Runnable> consumerMap =
             new ConcurrentHashMap<>(EXPECTED_CONCURRENT_LOG_WATCHERS);
 
+    @Contract(pure = true)
     private StreamWatcher() {}
 
     /**

@@ -3,6 +3,8 @@ package org.togetherjava.tjbot.config;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -24,6 +26,7 @@ public final class Config {
     private final String projectWebsite;
     private final String discordGuildInvite;
 
+    @Contract(pure = true)
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     private Config(@JsonProperty("token") String token,
             @JsonProperty("databasePath") String databasePath,
@@ -43,7 +46,7 @@ public final class Config {
      * @param path the configuration file, as JSON object
      * @throws IOException if the file could not be loaded
      */
-    public static void load(Path path) throws IOException {
+    public static void load(@NotNull Path path) throws IOException {
         config = new ObjectMapper().readValue(path.toFile(), Config.class);
     }
 
@@ -54,6 +57,7 @@ public final class Config {
      *
      * @return the previously loaded configuration
      */
+    @Contract(pure = true)
     public static Config getInstance() {
         return Objects.requireNonNull(config,
                 "can not get the configuration before it has been loaded");
@@ -64,6 +68,7 @@ public final class Config {
      *
      * @return the Discord bot token
      */
+    @Contract(pure = true)
     public String getToken() {
         return token;
     }
@@ -73,6 +78,7 @@ public final class Config {
      *
      * @return the path of the database
      */
+    @Contract(pure = true)
     public String getDatabasePath() {
         return databasePath;
     }
@@ -82,6 +88,7 @@ public final class Config {
      *
      * @return the website of the project
      */
+    @Contract(pure = true)
     public String getProjectWebsite() {
         return projectWebsite;
     }
@@ -91,6 +98,7 @@ public final class Config {
      *
      * @return an invite-URL for this Discord guild
      */
+    @Contract(pure = true)
     public String getDiscordGuildInvite() {
         return discordGuildInvite;
     }

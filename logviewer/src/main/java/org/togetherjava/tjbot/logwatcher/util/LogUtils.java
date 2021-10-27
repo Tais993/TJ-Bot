@@ -1,5 +1,8 @@
 package org.togetherjava.tjbot.logwatcher.util;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.togetherjava.tjbot.db.generated.tables.pojos.Logevents;
 
 import java.util.Arrays;
@@ -25,7 +28,8 @@ public final class LogUtils {
          * 
          * @return A Set containing every Loglevel
          */
-        public static Set<LogLevel> getAll() {
+        @Contract(" -> new")
+        public static @NotNull Set<LogLevel> getAll() {
             return EnumSet.allOf(LogLevel.class);
         }
 
@@ -34,7 +38,8 @@ public final class LogUtils {
          *
          * @return A Set containing every LogLevel as String
          */
-        public static Set<String> getAllNames() {
+        @Unmodifiable
+        public static @NotNull Set<String> getAllNames() {
             return Arrays.stream(values()).map(Enum::name).collect(Collectors.toUnmodifiableSet());
         }
     }
@@ -46,11 +51,12 @@ public final class LogUtils {
      * @param event Logevent from the DB with a specific Logevent
      * @return The name of the CSS class to use with this Logevent.
      */
-    public static String logLevelToCssClass(final Logevents event) {
+    public static @NotNull String logLevelToCssClass(final Logevents event) {
         return event.getLevel().toLowerCase(Locale.ENGLISH);
     }
 
 
 
+    @Contract(pure = true)
     private LogUtils() {}
 }

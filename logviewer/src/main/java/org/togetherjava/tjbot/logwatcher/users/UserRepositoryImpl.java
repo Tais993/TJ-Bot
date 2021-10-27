@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.logwatcher.users;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.Role;
 import org.togetherjava.tjbot.db.Database;
@@ -20,6 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final Database db;
 
+    @Contract(pure = true)
     public UserRepositoryImpl(Database db) {
         this.db = db;
     }
@@ -98,11 +101,12 @@ public class UserRepositoryImpl implements UserRepository {
         });
     }
 
-    private Users recordToRole(UsersRecord usersRecord) {
+    @Contract("_ -> new")
+    private @NotNull Users recordToRole(@NotNull UsersRecord usersRecord) {
         return new Users(usersRecord.getDiscordid(), usersRecord.getUsername());
     }
 
-    private Role recordToRole(UserrolesRecord rolesRecord) {
+    private @NotNull Role recordToRole(@NotNull UserrolesRecord rolesRecord) {
         return Role.forID(rolesRecord.getRoleid());
     }
 }

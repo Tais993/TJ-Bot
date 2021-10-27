@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.logwatcher.logs;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 import org.togetherjava.tjbot.db.Database;
 import org.togetherjava.tjbot.db.generated.tables.pojos.Logevents;
@@ -15,13 +17,14 @@ public class LogRepositoryImpl implements LogRepository {
 
     private final Database db;
 
+    @Contract(pure = true)
     public LogRepositoryImpl(final Database db) {
         this.db = db;
     }
 
 
     @Override
-    public void save(Logevents event) {
+    public void save(@NotNull Logevents event) {
         this.db.writeTransaction(ctx -> {
             LogeventsRecord toInsert = ctx.newRecord(LOGEVENTS)
                 .setEndofbatch(event.getEndofbatch())
@@ -62,7 +65,8 @@ public class LogRepositoryImpl implements LogRepository {
         });
     }
 
-    private Logevents recordToPojo(final LogeventsRecord logRecord) {
+    @Contract("_ -> new")
+    private @NotNull Logevents recordToPojo(final @NotNull LogeventsRecord logRecord) {
         return new Logevents(logRecord.getId(), logRecord.getTime(), logRecord.getThread(),
                 logRecord.getLevel(), logRecord.getLoggername(), logRecord.getMessage(),
                 logRecord.getEndofbatch(), logRecord.getLoggerfqcn(), logRecord.getThreadid(),

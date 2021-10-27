@@ -10,6 +10,9 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.LoggerFactory;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.AllowedRoles;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.Role;
@@ -34,7 +37,7 @@ public class MainLayout extends AppLayout {
     private final transient AuthenticatedUser authenticatedUser;
     private H1 viewTitle;
 
-    public MainLayout(AuthenticatedUser authUser) {
+    public MainLayout(@NotNull AuthenticatedUser authUser) {
         this.authenticatedUser = authUser;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
@@ -51,7 +54,7 @@ public class MainLayout extends AppLayout {
 
     }
 
-    private static RouterLink createLink(MenuItemInfo menuItemInfo) {
+    private static @NotNull RouterLink createLink(@NotNull MenuItemInfo menuItemInfo) {
         RouterLink link = new RouterLink();
         link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
         link.setRoute(menuItemInfo.view());
@@ -69,7 +72,7 @@ public class MainLayout extends AppLayout {
         return link;
     }
 
-    private Component createHeaderContent() {
+    private @NotNull Component createHeaderContent() {
         DrawerToggle toggle = new DrawerToggle();
         toggle.addClassName("text-secondary");
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
@@ -84,7 +87,7 @@ public class MainLayout extends AppLayout {
         return header;
     }
 
-    private Component createDrawerContent() {
+    private @NotNull Component createDrawerContent() {
         H2 appName = new H2("Logviewer");
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
@@ -94,7 +97,7 @@ public class MainLayout extends AppLayout {
         return section;
     }
 
-    private Nav createNavigation() {
+    private @NotNull Nav createNavigation() {
         Nav nav = new Nav();
         nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
@@ -109,7 +112,8 @@ public class MainLayout extends AppLayout {
         return nav;
     }
 
-    private List<RouterLink> createLinks() {
+    @Unmodifiable
+    private @NotNull List<RouterLink> createLinks() {
         return Stream
             .of(new MenuItemInfo("Logs", "la la-globe", LogsView.class),
                     new MenuItemInfo("Streamed", "la la-globe", StreamedView.class),
@@ -119,7 +123,7 @@ public class MainLayout extends AppLayout {
             .toList();
     }
 
-    private boolean checkAccess(MenuItemInfo menuItemInfo) {
+    private boolean checkAccess(@NotNull MenuItemInfo menuItemInfo) {
         final Class<? extends Component> view = menuItemInfo.view;
         final AllowedRoles annotation = view.getAnnotation(AllowedRoles.class);
 
@@ -134,7 +138,8 @@ public class MainLayout extends AppLayout {
         return !Sets.intersection(this.authenticatedUser.getRoles(), roles).isEmpty();
     }
 
-    private Footer createFooter() {
+    @Contract(" -> new")
+    private @NotNull Footer createFooter() {
         Footer layout = new Footer();
         layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
 
@@ -161,6 +166,7 @@ public class MainLayout extends AppLayout {
         viewTitle.setText(getCurrentPageTitle());
     }
 
+    @NotNull
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();

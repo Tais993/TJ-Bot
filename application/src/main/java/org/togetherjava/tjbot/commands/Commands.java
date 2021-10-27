@@ -1,6 +1,7 @@
 package org.togetherjava.tjbot.commands;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.togetherjava.tjbot.commands.basic.DatabaseCommand;
 import org.togetherjava.tjbot.commands.basic.PingCommand;
 import org.togetherjava.tjbot.commands.mathcommands.TeXCommand;
@@ -33,6 +34,7 @@ public enum Commands {
      * @param database the database of the application, which commands can use to persist data
      * @return a collection of all slash commands
      */
+    @Unmodifiable
     public static @NotNull Collection<SlashCommand> createSlashCommands(
             @NotNull Database database) {
         TagSystem tagSystem = new TagSystem(database);

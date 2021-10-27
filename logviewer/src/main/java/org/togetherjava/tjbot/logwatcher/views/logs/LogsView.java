@@ -13,6 +13,7 @@ import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.AllowedRoles;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.Role;
@@ -76,7 +77,7 @@ public class LogsView extends VerticalLayout {
     }
 
     private void onLogLevelCheckbox(
-            AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+            @NotNull AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
         if (!event.isFromClient()) {
             return;
         }
@@ -95,7 +96,7 @@ public class LogsView extends VerticalLayout {
      *
      * @return The created Combobox
      */
-    private ComboBox<Path> createComboBox() {
+    private @NotNull ComboBox<Path> createComboBox() {
         final ComboBox<Path> logs = new ComboBox<>("Log-Files");
         logs.setAllowCustomValue(false);
         logs.setRenderer(new TextRenderer<>(p -> p.getFileName().toString()));
@@ -114,7 +115,7 @@ public class LogsView extends VerticalLayout {
      *
      * @param event Generated Event, containing old and new Value
      */
-    private void onLogFileCombobox(HasValue.ValueChangeEvent<Path> event) {
+    private void onLogFileCombobox(HasValue.@NotNull ValueChangeEvent<Path> event) {
         if (Objects.equals(event.getOldValue(), event.getValue())) {
             return;
         }

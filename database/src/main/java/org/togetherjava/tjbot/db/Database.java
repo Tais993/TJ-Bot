@@ -1,6 +1,8 @@
 package org.togetherjava.tjbot.db;
 
 import org.flywaydb.core.Flyway;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
@@ -24,6 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public final class Database {
 
+    @NotNull
     private final DSLContext dslContext;
     /**
      * Lock used to implement thread-safety across this class. Any database modifying method must
@@ -62,7 +65,7 @@ public final class Database {
      * @throws DatabaseException if an error occurs in the given action
      */
     public <T> T read(
-            CheckedFunction<? super DSLContext, T, ? extends DataAccessException> action) {
+            @NotNull CheckedFunction<? super DSLContext, T, ? extends DataAccessException> action) {
         try {
             return action.accept(getDslContext());
         } catch (DataAccessException e) {
@@ -76,7 +79,8 @@ public final class Database {
      * @param action the action that consumes the DSL context, e.g. a query
      * @throws DatabaseException if an error occurs in the given action
      */
-    public void read(CheckedConsumer<? super DSLContext, ? extends DataAccessException> action) {
+    public void read(
+            @NotNull CheckedConsumer<? super DSLContext, ? extends DataAccessException> action) {
         read(context -> {
             action.accept(context);
             // noinspection ReturnOfNull
@@ -93,7 +97,7 @@ public final class Database {
      * @throws DatabaseException if an error occurs in the given action
      */
     public <T> T write(
-            CheckedFunction<? super DSLContext, T, ? extends DataAccessException> action) {
+            @NotNull CheckedFunction<? super DSLContext, T, ? extends DataAccessException> action) {
         writeLock.lock();
         try {
             return action.accept(getDslContext());
@@ -110,7 +114,8 @@ public final class Database {
      * @param action the action to apply to the DSL context, e.g. a query
      * @throws DatabaseException if an error occurs in the given action
      */
-    public void write(CheckedConsumer<? super DSLContext, ? extends DataAccessException> action) {
+    public void write(
+            @NotNull CheckedConsumer<? super DSLContext, ? extends DataAccessException> action) {
         write(context -> {
             action.accept(context);
             // noinspection ReturnOfNull
@@ -128,7 +133,7 @@ public final class Database {
      * @throws DatabaseException if an error occurs in the given handler function
      */
     public <T> T readTransaction(
-            CheckedFunction<? super DSLContext, T, DataAccessException> handler) {
+            @NotNull CheckedFunction<? super DSLContext, T, DataAccessException> handler) {
         var holder = new ResultHolder<T>();
 
         try {
@@ -148,7 +153,7 @@ public final class Database {
      * @throws DatabaseException if an error occurs in the given handler function
      */
     public void readTransaction(
-            CheckedConsumer<? super DSLContext, ? extends DataAccessException> handler) {
+            @NotNull CheckedConsumer<? super DSLContext, ? extends DataAccessException> handler) {
         readTransaction(dsl -> {
             handler.accept(dsl);
             // noinspection ReturnOfNull
@@ -166,7 +171,7 @@ public final class Database {
      * @throws DatabaseException if an error occurs in the given handler function
      */
     public <T> T writeTransaction(
-            CheckedFunction<? super DSLContext, T, DataAccessException> handler) {
+            @NotNull CheckedFunction<? super DSLContext, T, DataAccessException> handler) {
         var holder = new ResultHolder<T>();
 
         writeLock.lock();
@@ -189,7 +194,7 @@ public final class Database {
      * @throws DatabaseException if an error occurs in the given handler function
      */
     public void writeTransaction(
-            CheckedConsumer<? super DSLContext, ? extends DataAccessException> handler) {
+            @NotNull CheckedConsumer<? super DSLContext, ? extends DataAccessException> handler) {
         writeTransaction(dsl -> {
             handler.accept(dsl);
             // noinspection ReturnOfNull
@@ -197,7 +202,8 @@ public final class Database {
         });
     }
 
-    private DSLContext getDslContext() {
+    @Contract(pure = true)
+    private @NotNull DSLContext getDslContext() {
         return dslContext;
     }
 

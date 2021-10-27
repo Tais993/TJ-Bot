@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.formatter.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +17,7 @@ public class LookaheadArrayDeque<E> extends ArrayDeque<E> implements LookaheadQu
         super(numElements);
     }
 
-    public LookaheadArrayDeque(Collection<? extends E> c) {
+    public LookaheadArrayDeque(@NotNull Collection<? extends E> c) {
         super(c);
     }
 

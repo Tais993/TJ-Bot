@@ -2,6 +2,7 @@ package org.togetherjava.tjbot.logwatcher.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class Config {
      */
     private final String databasePath;
 
-    public Config(final ObjectMapper mapper) {
+    public Config(final @NotNull ObjectMapper mapper) {
         final JsonNode jsonNode = getJsonNode(mapper);
 
         this.clientName = jsonNode.get("clientName").asText();
@@ -79,7 +80,7 @@ public class Config {
         this.databasePath = jsonNode.get("databasePath").asText();
     }
 
-    private JsonNode getJsonNode(final ObjectMapper mapper) {
+    private JsonNode getJsonNode(final @NotNull ObjectMapper mapper) {
         final String pathToConfig = Objects.requireNonNull(CONFIG_PATH.get(), "Path not Set");
         try {
             return mapper.readTree(Path.of(pathToConfig).toFile());

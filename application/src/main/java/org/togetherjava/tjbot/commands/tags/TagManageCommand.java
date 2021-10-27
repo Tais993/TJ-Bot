@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public final class TagManageCommand extends SlashCommandAdapter {
      *
      * @param tagSystem the system providing the actual tag data
      */
-    public TagManageCommand(TagSystem tagSystem) {
+    public TagManageCommand(@NotNull TagSystem tagSystem) {
         super("tag-manage", "Provides commands to manage all tags", SlashCommandVisibility.GUILD);
 
         this.tagSystem = tagSystem;
@@ -293,11 +294,12 @@ public final class TagManageCommand extends SlashCommandAdapter {
 
         private final String name;
 
+        @Contract(pure = true)
         Subcommand(String name) {
             this.name = name;
         }
 
-        static Subcommand fromName(String name) {
+        static @NotNull Subcommand fromName(String name) {
             for (Subcommand subcommand : Subcommand.values()) {
                 if (subcommand.name.equals(name)) {
                     return subcommand;

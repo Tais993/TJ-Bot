@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.logwatcher.constants;
 
+import org.jetbrains.annotations.Contract;
+
 /**
  * Constant Class for Logevents
  */
@@ -20,5 +22,6 @@ public final class LogEventsConstants {
     /**
      * Contestants class, nothing to instantiate
      */
+    @Contract(pure = true)
     private LogEventsConstants() {}
 }

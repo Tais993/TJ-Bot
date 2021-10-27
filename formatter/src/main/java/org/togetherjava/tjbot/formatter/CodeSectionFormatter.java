@@ -1,5 +1,8 @@
 package org.togetherjava.tjbot.formatter;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.togetherjava.tjbot.formatter.tokenizer.Token;
 import org.togetherjava.tjbot.formatter.tokenizer.TokenType;
 import org.togetherjava.tjbot.formatter.util.LookaheadQueue;
@@ -13,6 +16,8 @@ import java.util.function.Predicate;
  * Formatter which specifically formats code tokens (that are part of a section)
  */
 class CodeSectionFormatter {
+
+    @NotNull
     private final StringBuilder result = new StringBuilder();
     private final SkippableLookaheadQueue<Token> queue;
 
@@ -21,11 +26,11 @@ class CodeSectionFormatter {
     private int forLevel;
     private int genericDepth;
 
-    CodeSectionFormatter(List<Token> tokens) {
+    CodeSectionFormatter(@NotNull List<Token> tokens) {
         this(new SkippableLookaheadArrayDeque<>(tokens));
     }
 
-    CodeSectionFormatter(SkippableLookaheadQueue<Token> queue) {
+    CodeSectionFormatter(@NotNull SkippableLookaheadQueue<Token> queue) {
         this.queue = queue;
 
         purgeWhitespaces(this.queue);
@@ -36,7 +41,7 @@ class CodeSectionFormatter {
      *
      * @param queue the queue to remove whitespaces from
      */
-    private static void purgeWhitespaces(Queue<Token> queue) {
+    private static void purgeWhitespaces(@NotNull Queue<Token> queue) {
         queue.removeIf(t -> t.type() == TokenType.WHITESPACE);
     }
 
@@ -58,7 +63,7 @@ class CodeSectionFormatter {
      *
      * @param token token to consume
      */
-    private void consume(Token token) {
+    private void consume(@NotNull Token token) {
         TokenType type = token.type();
 
         if (checkGeneric(type)) {
@@ -82,7 +87,7 @@ class CodeSectionFormatter {
      *
      * @param token token to put
      */
-    private void put(Token token) {
+    private void put(@NotNull Token token) {
         TokenType type = token.type();
 
         if (isOperator(token)) { // apply space before an operator (like +, - and *)
@@ -111,7 +116,7 @@ class CodeSectionFormatter {
      * @param token token to check
      * @return whether a space should be put after that token
      */
-    private boolean shouldPutSpaceAfter(Token token) {
+    private boolean shouldPutSpaceAfter(@NotNull Token token) {
         TokenType type = token.type();
 
         return isKeyword(token) || isOperator(token) || isParenthesisRule(token)
@@ -142,7 +147,7 @@ class CodeSectionFormatter {
      *
      * @param token current token
      */
-    private void handleGeneric(Token token) {
+    private void handleGeneric(@NotNull Token token) {
         TokenType type = token.type();
 
         if (type == TokenType.EXTENDS || type == TokenType.SUPER) {
@@ -179,7 +184,7 @@ class CodeSectionFormatter {
      * @param type current token type
      * @return whether the token type belongs to a generic type declaration
      */
-    private boolean checkGeneric(TokenType type) {
+    private boolean checkGeneric(@Nullable TokenType type) {
         if (type == TokenType.LESS_THAN) {
             int depth = 1;
 
@@ -217,7 +222,8 @@ class CodeSectionFormatter {
      * @param type token type to check
      * @return whether it's valid inside a generic type declaration
      */
-    private boolean isValidGeneric(TokenType type) {
+    @Contract(pure = true)
+    private boolean isValidGeneric(@Nullable TokenType type) {
         return type == TokenType.WILDCARD || type == TokenType.LESS_THAN
                 || type == TokenType.GREATER_THAN || type == TokenType.COMMA
                 || type == TokenType.DOT || type == TokenType.EXTENDS || type == TokenType.SUPER
@@ -230,7 +236,7 @@ class CodeSectionFormatter {
      * @param type token type to check
      * @return whether a new line should be put after that token
      */
-    private boolean shouldPutNewLineAfter(TokenType type) {
+    private boolean shouldPutNewLineAfter(@Nullable TokenType type) {
         if (type == TokenType.OPEN_BRACES || type == TokenType.SEMICOLON
                 || type == TokenType.COMMENT || type == TokenType.ANNOTATION) {
             return true;
@@ -249,7 +255,7 @@ class CodeSectionFormatter {
      * @param type current token type
      * @return whether there's an indexed for loop or not
      */
-    private boolean isIndexedForLoop(TokenType type) {
+    private boolean isIndexedForLoop(@Nullable TokenType type) {
         return type == TokenType.FOR && !internalEnhancedFor();
     }
 
@@ -272,7 +278,7 @@ class CodeSectionFormatter {
      *
      * @return whether a space should be put after the parenthesis
      */
-    private boolean isParenthesisRule(Token token) {
+    private boolean isParenthesisRule(@NotNull Token token) {
         if (queue.isEmpty()) {
             return false;
         }
@@ -304,7 +310,7 @@ class CodeSectionFormatter {
      * @param token token to check
      * @return whether the given token is a keyword
      */
-    private boolean isKeyword(Token token) {
+    private boolean isKeyword(@NotNull Token token) {
         return token.type().isKeyword();
     }
 
@@ -314,7 +320,7 @@ class CodeSectionFormatter {
      * @param token token to check
      * @return whether the given token is an operator
      */
-    private boolean isOperator(Token token) {
+    private boolean isOperator(@NotNull Token token) {
         return token.type().isOperator();
     }
 
@@ -323,7 +329,8 @@ class CodeSectionFormatter {
      *
      * @param type current token type
      */
-    private void updateIndentation(TokenType type) {
+    @Contract(mutates = "this")
+    private void updateIndentation(@Nullable TokenType type) {
         if (type == TokenType.OPEN_BRACES) {
             indentation++;
         } else if (type == TokenType.CLOSE_BRACES) {
@@ -342,6 +349,7 @@ class CodeSectionFormatter {
         }
     }
 
+    @NotNull
     StringBuilder result() {
         return result;
     }

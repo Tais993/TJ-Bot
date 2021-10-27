@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.logwatcher;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -26,9 +28,10 @@ public class DatabaseProvider {
         this.db = createDB();
     }
 
+    @Contract(" -> new")
     @SuppressWarnings({"java:S2139"}) // At this point there is nothing we can do about a
     // SQLException
-    private Database createDB() {
+    private @NotNull Database createDB() {
         final Path dbPath = getDBPath();
 
         try {
@@ -40,7 +43,7 @@ public class DatabaseProvider {
         }
     }
 
-    private Path getDBPath() {
+    private @NotNull Path getDBPath() {
         final Path dbPath = Path.of(this.config.getDatabasePath());
 
         try {

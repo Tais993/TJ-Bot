@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.formatter.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +15,7 @@ public class SkippableLookaheadArrayDeque<E> extends LookaheadArrayDeque<E>
         super(numElements);
     }
 
-    public SkippableLookaheadArrayDeque(Collection<? extends E> c) {
+    public SkippableLookaheadArrayDeque(@NotNull Collection<? extends E> c) {
         super(c);
     }
 

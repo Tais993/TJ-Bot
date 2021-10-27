@@ -33,7 +33,7 @@ public final class TagsCommand extends SlashCommandAdapter {
      *
      * @param tagSystem the system providing the actual tag data
      */
-    public TagsCommand(TagSystem tagSystem) {
+    public TagsCommand(@NotNull TagSystem tagSystem) {
         super("tags", "Displays all available tags", SlashCommandVisibility.GUILD);
 
         this.tagSystem = tagSystem;

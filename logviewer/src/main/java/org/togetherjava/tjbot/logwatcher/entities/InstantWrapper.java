@@ -2,6 +2,9 @@ package org.togetherjava.tjbot.logwatcher.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -16,6 +19,7 @@ public class InstantWrapper {
      * @param epochSecond
      * @param nanoOfSecond
      */
+    @Contract(pure = true)
     @JsonCreator
     public InstantWrapper(@JsonProperty("epochSecond") long epochSecond,
             @JsonProperty("nanoOfSecond") long nanoOfSecond) {
@@ -40,6 +44,8 @@ public class InstantWrapper {
         this.nanoOfSecond = nanoOfSecond;
     }
 
+    @Nls
+    @NotNull
     @Override
     public String toString() {
         final var instant = toInstant();
@@ -51,6 +57,7 @@ public class InstantWrapper {
         return Instant.ofEpochSecond(this.epochSecond, this.nanoOfSecond);
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof InstantWrapper other))

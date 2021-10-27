@@ -1,5 +1,8 @@
 package org.togetherjava.tjbot.formatter.tokenizer;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.regex.Pattern;
 
 /**
@@ -102,7 +105,7 @@ public enum TokenType {
     private final boolean isKeyword;
     private final boolean isOperator;
 
-    TokenType(String pattern, boolean isKeyword, boolean isOperator) {
+    TokenType(@NotNull String pattern, boolean isKeyword, boolean isOperator) {
         if (!isKeyword) {
             this.regex = Pattern.compile("^(" + Pattern.quote(pattern) + ")");
         } else {
@@ -113,24 +116,28 @@ public enum TokenType {
         this.isOperator = isOperator;
     }
 
+    @Contract(pure = true)
     TokenType(Pattern regex) {
         this.regex = regex;
         this.isKeyword = false;
         this.isOperator = false;
     }
 
-    TokenType(String pattern) {
+    TokenType(@NotNull String pattern) {
         this(pattern, false, false);
     }
 
+    @Contract(pure = true)
     public Pattern getRegex() {
         return regex;
     }
 
+    @Contract(pure = true)
     public boolean isKeyword() {
         return isKeyword;
     }
 
+    @Contract(pure = true)
     public boolean isOperator() {
         return isOperator;
     }

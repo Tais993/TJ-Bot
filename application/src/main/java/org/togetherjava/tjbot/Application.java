@@ -2,6 +2,8 @@ package org.togetherjava.tjbot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.togetherjava.tjbot.commands.Commands;
@@ -35,7 +37,7 @@ public enum Application {
      * @param args command line arguments - [the path to the configuration file (optional, by
      *        default "config.json")]
      */
-    public static void main(final String[] args) {
+    public static void main(final String @NotNull [] args) {
         if (args.length > 1) {
             throw new IllegalArgumentException("Expected no or one argument but " + args.length
                     + " arguments were provided. The first argument is the path to the configuration file. If no argument was provided, '"
@@ -66,7 +68,7 @@ public enum Application {
      * @param databasePath the path to the database to use
      */
     @SuppressWarnings("WeakerAccess")
-    public static void runBot(String token, Path databasePath) {
+    public static void runBot(@Nullable String token, @NotNull Path databasePath) {
         logger.info("Starting bot...");
         try {
             Path parentDatabasePath = databasePath.toAbsolutePath().getParent();

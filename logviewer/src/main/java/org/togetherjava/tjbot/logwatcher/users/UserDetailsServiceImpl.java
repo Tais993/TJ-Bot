@@ -1,5 +1,6 @@
 package org.togetherjava.tjbot.logwatcher.users;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +21,10 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    @NotNull
     private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, Config config) {
+    public UserDetailsServiceImpl(@NotNull UserRepository userRepository, Config config) {
         this.userRepository = userRepository;
 
         if (this.userRepository.count() == 0) {

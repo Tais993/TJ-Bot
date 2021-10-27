@@ -1,5 +1,9 @@
 package org.togetherjava.tjbot.formatter.tokenizer;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +26,8 @@ public class Lexer {
      * @param input input to tokenize
      * @return resulting tokens
      */
-    public List<Token> tokenize(String input) {
+    @Unmodifiable
+    public @NotNull List<Token> tokenize(@NotNull String input) {
         return tokenize(Arrays.asList(patchComments(input).split("\n")));
     }
 
@@ -32,7 +37,8 @@ public class Lexer {
      * @param lines input to tokenize
      * @return resulting tokens
      */
-    public List<Token> tokenize(List<String> lines) {
+    @Unmodifiable
+    public @NotNull List<Token> tokenize(@NotNull List<String> lines) {
         return lines.stream().map(this::tokenizeLine).flatMap(List::stream).toList();
     }
 
@@ -42,7 +48,7 @@ public class Lexer {
      * @param line input to tokenize
      * @return resulting tokens
      */
-    private List<Token> tokenizeLine(String line) {
+    private @NotNull List<Token> tokenizeLine(@NotNull String line) {
         List<Token> tokens = new ArrayList<>();
         int index = 0;
         String content;
@@ -58,7 +64,8 @@ public class Lexer {
         return tokens;
     }
 
-    private Token findToken(String content) {
+    @Contract("_ -> new")
+    private @NotNull Token findToken(String content) {
         for (TokenType type : TokenType.values()) {
             Matcher matcher = type.getRegex().matcher(content);
 
@@ -76,7 +83,8 @@ public class Lexer {
      * @param input input to patch
      * @return resulting string
      */
-    private String patchComments(String input) { // fix this, you shouldn't need this!
+    @NotNull
+    private String patchComments(@NotNull String input) { // fix this, you shouldn't need this!
         Matcher matcher = commentPatcherRegex.matcher(input);
 
         while (matcher.find()) {

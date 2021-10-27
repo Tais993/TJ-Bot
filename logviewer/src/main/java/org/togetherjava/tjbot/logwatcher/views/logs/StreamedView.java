@@ -13,6 +13,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.SessionDestroyEvent;
 import com.vaadin.flow.server.VaadinService;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.togetherjava.tjbot.db.generated.tables.pojos.Logevents;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.AllowedRoles;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.Role;
@@ -43,7 +46,7 @@ public class StreamedView extends VerticalLayout {
     private final UUID uuid = UUID.randomUUID();
     private final Set<String> enabledLogLevel = new HashSet<>(LogUtils.LogLevel.getAllNames());
 
-    public StreamedView(LogRepository logs) {
+    public StreamedView(@NotNull LogRepository logs) {
         addClassName("logs-view");
 
         final HorizontalLayout buttonPanel =
@@ -81,7 +84,7 @@ public class StreamedView extends VerticalLayout {
     }
 
     private void onLogLevelCheckbox(
-            AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
+            @NotNull AbstractField.ComponentValueChangeEvent<Checkbox, Boolean> event) {
         if (!event.isFromClient()) {
             return;
         }
@@ -97,12 +100,12 @@ public class StreamedView extends VerticalLayout {
         this.grid.refreshGrid();
     }
 
-    private void onDestroy(SessionDestroyEvent event) {
+    private void onDestroy(@Nullable SessionDestroyEvent event) {
         removeHook();
     }
 
     @Override
-    protected void onDetach(DetachEvent detachEvent) {
+    protected void onDetach(@Nullable DetachEvent detachEvent) {
         removeHook();
         super.onDetach(detachEvent);
     }
@@ -137,7 +140,7 @@ public class StreamedView extends VerticalLayout {
         innerGrid.addColumns(keys);
     }
 
-    private void onChangeColumns(ClickEvent<Button> event) {
+    private void onChangeColumns(@Nullable ClickEvent<Button> event) {
         final EnhancedDialog dialog = new EnhancedDialog();
         dialog.setHeader("Choose the Columns you want to see.");
         final Set<String> columns = this.grid.getGrid()
@@ -162,7 +165,8 @@ public class StreamedView extends VerticalLayout {
         dialog.open();
     }
 
-    private void onOkay(final EnhancedDialog dialog, final List<Checkbox> checkboxes) {
+    private void onOkay(final @NotNull EnhancedDialog dialog,
+            final @NotNull List<Checkbox> checkboxes) {
         final String[] columns = checkboxes.stream()
             .filter(AbstractField::getValue)
             .map(Checkbox::getLabel)

@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.togetherjava.tjbot.commands.system.ComponentIds;
 
@@ -70,7 +71,7 @@ public abstract class SlashCommandAdapter implements SlashCommand {
      * @param visibility the visibility of the command
      */
     protected SlashCommandAdapter(@NotNull String name, @NotNull String description,
-            SlashCommandVisibility visibility) {
+            @NotNull SlashCommandVisibility visibility) {
         this.name = name;
         this.description = description;
         this.visibility = visibility;
@@ -78,21 +79,25 @@ public abstract class SlashCommandAdapter implements SlashCommand {
         data = new CommandData(name, description);
     }
 
+    @Contract(pure = true)
     @Override
     public final @NotNull String getName() {
         return name;
     }
 
+    @Contract(pure = true)
     @Override
     public final @NotNull String getDescription() {
         return description;
     }
 
+    @Contract(pure = true)
     @Override
     public final @NotNull SlashCommandVisibility getVisibility() {
         return visibility;
     }
 
+    @Contract(pure = true)
     @Override
     public final @NotNull CommandData getData() {
         return data;

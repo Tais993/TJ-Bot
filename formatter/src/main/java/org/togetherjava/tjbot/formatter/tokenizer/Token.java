@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.formatter.tokenizer;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Set;
 
 /**
@@ -10,7 +12,7 @@ public record Token(String content, TokenType type) {
             Set.of(TokenType.IDENTIFIER, TokenType.UNKNOWN, TokenType.STRING, TokenType.COMMENT);
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return type().name() + formatForDisplay();
     }
 
@@ -19,7 +21,7 @@ public record Token(String content, TokenType type) {
      *
      * @return the displayed value
      */
-    private String formatForDisplay() {
+    private @NotNull String formatForDisplay() {
         if (displayTypes.contains(type())) {
             return "(" + content() + ")";
         }

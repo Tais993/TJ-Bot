@@ -1,6 +1,8 @@
 package org.togetherjava.tjbot.logwatcher.oauth;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,19 +27,19 @@ import org.togetherjava.tjbot.logwatcher.config.Config;
 public class OAuth2LoginConfig {
 
     @Bean
-    public ClientRegistrationRepository clientRegistrationRepository(Config config) {
+    public ClientRegistrationRepository clientRegistrationRepository(@NotNull Config config) {
         return new InMemoryClientRegistrationRepository(googleClientRegistration(config));
     }
 
     @Bean
     public OAuth2AuthorizedClientService authorizedClientService(
-            ClientRegistrationRepository clientRegistrationRepository) {
+            @NotNull ClientRegistrationRepository clientRegistrationRepository) {
         return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
     }
 
     @Bean
     public OAuth2AuthorizedClientRepository authorizedClientRepository(
-            OAuth2AuthorizedClientService authorizedClientService) {
+            @NotNull OAuth2AuthorizedClientService authorizedClientService) {
         return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService);
     }
 
@@ -46,7 +48,8 @@ public class OAuth2LoginConfig {
      *
      * @return The ClientRegistration for Discord
      */
-    private ClientRegistration googleClientRegistration(Config config) {
+    @Contract("_ -> new")
+    private @NotNull ClientRegistration googleClientRegistration(@NotNull Config config) {
         return ClientRegistration.withRegistrationId("Discord")
             .clientName(config.getClientName())
             .clientId(config.getClientId())
@@ -75,7 +78,7 @@ public class OAuth2LoginConfig {
         }
 
         @Override
-        protected void configure(HttpSecurity http) throws Exception {
+        protected void configure(@NotNull HttpSecurity http) throws Exception {
             http.authorizeRequests().antMatchers("/rest/api/**").anonymous();
             http.oauth2Login();
             http.logout()

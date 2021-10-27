@@ -3,7 +3,9 @@ package org.togetherjava.tjbot.commands.system;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +48,7 @@ public final class ComponentId {
      *
      * @return the name of the command
      */
+    @Contract(pure = true)
     public @NotNull String getCommandName() {
         return commandName;
     }
@@ -56,6 +59,7 @@ public final class ComponentId {
      *
      * @return the ID
      */
+    @Contract(pure = true)
     public int getId() {
         return id;
     }
@@ -65,6 +69,8 @@ public final class ComponentId {
      *
      * @return the extra elements
      */
+    @Contract(pure = true)
+    @UnmodifiableView
     public @NotNull List<String> getElements() {
         return Collections.unmodifiableList(elements);
     }

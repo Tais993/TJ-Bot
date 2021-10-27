@@ -1,5 +1,8 @@
 package org.togetherjava.tjbot.logwatcher.accesscontrol;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
@@ -24,21 +27,26 @@ public enum Role {
     ADMIN(2, "admin");
 
     private final int id;
+    @NotNull
     private final String roleName;
 
-    Role(int id, String roleName) {
+    @Contract(pure = true)
+    Role(int id, @NotNull String roleName) {
         this.id = id;
         this.roleName = roleName;
     }
 
+    @Contract(pure = true)
     public int getId() {
         return id;
     }
 
-    public String getRoleName() {
+    @Contract(pure = true)
+    public @NotNull String getRoleName() {
         return roleName;
     }
 
+    @NotNull
     public static Role forID(final int id) {
         return Arrays.stream(values())
             .filter(r -> r.id == id)
@@ -46,7 +54,8 @@ public enum Role {
             .orElseThrow(() -> new IllegalArgumentException("Unknown RoleID: %d".formatted(id)));
     }
 
-    public static Set<Role> getDisplayableRoles() {
+    @Contract(" -> new")
+    public static @NotNull Set<Role> getDisplayableRoles() {
         return EnumSet.of(USER, ADMIN);
     }
 

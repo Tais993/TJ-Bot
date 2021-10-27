@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.logwatcher.logs;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ public class LogREST {
 
     private final LogRepository logs;
 
+    @Contract(pure = true)
     public LogREST(final LogRepository logs) {
         this.logs = logs;
     }
@@ -27,7 +30,8 @@ public class LogREST {
         return ResponseEntity.ok().build();
     }
 
-    private Logevents mapToLogevents(final LogEvent body) {
+    @Contract("_ -> new")
+    private @NotNull Logevents mapToLogevents(final LogEvent body) {
         return new Logevents(Integer.MIN_VALUE,
                 LocalDateTime.ofInstant(body.getInstant(), ZoneId.systemDefault()),
                 body.getThread(), body.getLevel(), body.getLoggerName(), body.getMessage(),

@@ -1,5 +1,8 @@
 package org.togetherjava.tjbot.formatter;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.togetherjava.tjbot.formatter.tokenizer.Lexer;
 import org.togetherjava.tjbot.formatter.tokenizer.Token;
 import org.togetherjava.tjbot.formatter.tokenizer.TokenType;
@@ -18,7 +21,8 @@ public class Formatter {
      * @param tokens tokens to format
      * @return resulting code
      */
-    public String format(List<Token> tokens) {
+    @NotNull
+    public String format(@NotNull List<Token> tokens) {
         List<Section> sections = sectionize(indexTokens(tokens));
         StringBuilder result = new StringBuilder();
 
@@ -42,7 +46,7 @@ public class Formatter {
      * @param lexer lexer to use
      * @return resulting code
      */
-    public String format(String input, Lexer lexer) {
+    public String format(@NotNull String input, @NotNull Lexer lexer) {
         return format(lexer.tokenize(input));
     }
 
@@ -52,7 +56,7 @@ public class Formatter {
      * @param tokens tokens to join
      * @return joined form of the tokens
      */
-    private String joinTokens(List<Token> tokens) {
+    private String joinTokens(@NotNull List<Token> tokens) {
         return tokens.stream().map(Token::content).collect(Collectors.joining());
     }
 
@@ -63,7 +67,7 @@ public class Formatter {
      * @param tokens tokens to write
      * @return written code sections
      */
-    private StringBuilder writeCodeSection(List<Token> tokens) {
+    private @NotNull StringBuilder writeCodeSection(@NotNull List<Token> tokens) {
         CodeSectionFormatter formatter = new CodeSectionFormatter(tokens);
 
         formatter.format();
@@ -77,7 +81,9 @@ public class Formatter {
      * @param tokens not-indexed tokens
      * @return indexed tokens
      */
-    private List<CheckedToken> indexTokens(List<Token> tokens) {
+    @NotNull
+    @Unmodifiable
+    private List<CheckedToken> indexTokens(@NotNull List<Token> tokens) {
         return tokens.stream()
             .map(token -> new CheckedToken(token, isTokenPartOfCode(token)))
             .toList();
@@ -89,7 +95,8 @@ public class Formatter {
      * @param token token to check
      * @return true if it's a code token, false if not
      */
-    private boolean isTokenPartOfCode(Token token) {
+    @Contract(pure = true)
+    private boolean isTokenPartOfCode(@NotNull Token token) {
         return token.type() != TokenType.UNKNOWN;
     }
 
@@ -100,7 +107,7 @@ public class Formatter {
      * @param checkedTokens checked tokens
      * @return list of sections
      */
-    private List<Section> sectionize(List<CheckedToken> checkedTokens) {
+    private @NotNull List<Section> sectionize(@NotNull List<CheckedToken> checkedTokens) {
         CheckedToken first = checkedTokens.get(0);
         Section currentSection = new Section(new ArrayList<>(), first.isCode());
         List<Section> result = new ArrayList<>();

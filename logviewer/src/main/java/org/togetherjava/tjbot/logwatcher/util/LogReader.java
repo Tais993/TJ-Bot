@@ -1,5 +1,7 @@
 package org.togetherjava.tjbot.logwatcher.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.stereotype.Component;
 import org.togetherjava.tjbot.logwatcher.config.Config;
 
@@ -13,9 +15,10 @@ import java.util.stream.Stream;
 @Component
 public final class LogReader {
 
+    @NotNull
     private final Path logPath;
 
-    public LogReader(Config config) {
+    public LogReader(@NotNull Config config) {
         this.logPath = Path.of(config.getLogPath());
     }
 
@@ -24,7 +27,8 @@ public final class LogReader {
      *
      * @return Names of the Logfiles
      */
-    public List<Path> getLogs() {
+    @Unmodifiable
+    public @NotNull List<Path> getLogs() {
         try (final Stream<Path> stream = Files.list(this.logPath)) {
             return stream.filter(Files::isRegularFile)
                 .filter(s -> s.toString().endsWith(".log") || s.toString().endsWith(".log.gz"))
@@ -40,7 +44,7 @@ public final class LogReader {
      * @param log Name of the Logfile
      * @return The Content of the Log
      */
-    public List<String> readLog(final Path log) {
+    public List<String> readLog(final @NotNull Path log) {
         try {
             return Files.readAllLines(log);
         } catch (final IOException e) {

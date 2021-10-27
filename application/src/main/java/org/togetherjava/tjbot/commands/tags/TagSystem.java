@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.components.ButtonStyle;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.togetherjava.tjbot.db.Database;
 import org.togetherjava.tjbot.db.generated.tables.Tags;
@@ -31,7 +32,8 @@ public final class TagSystem {
      *
      * @param database the database to store and retrieve tags from
      */
-    public TagSystem(Database database) {
+    @Contract(pure = true)
+    public TagSystem(@NotNull Database database) {
         this.database = database;
     }
 
@@ -43,7 +45,7 @@ public final class TagSystem {
      * @return the created delete button
      */
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
-    static Button createDeleteButton(String componentId) {
+    static @NotNull Button createDeleteButton(String componentId) {
         return Button.of(ButtonStyle.DANGER, componentId, "Delete",
                 Emoji.fromUnicode("\uD83D\uDDD1")); // trash bin
     }
@@ -140,6 +142,7 @@ public final class TagSystem {
      *
      * @return a set of all ids known to the system, not backed
      */
+    @NotNull
     Set<String> getAllIds() {
         return database.readTransaction(context -> {
             try (var select = context.select(Tags.TAGS.ID)) {

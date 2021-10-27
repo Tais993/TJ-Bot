@@ -15,6 +15,8 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.AllowedRoles;
 import org.togetherjava.tjbot.logwatcher.accesscontrol.Role;
@@ -40,10 +42,11 @@ import java.util.stream.Stream;
 @PermitAll
 public class UserManagement extends VerticalLayout {
 
+    @NotNull
     private final transient UserRepository repo;
     private final Grid<UserWrapper> grid = new Grid<>(UserWrapper.class, false);
 
-    public UserManagement(UserRepository repository) {
+    public UserManagement(@NotNull UserRepository repository) {
         this.repo = repository;
         add(grid);
 
@@ -60,19 +63,21 @@ public class UserManagement extends VerticalLayout {
         grid.setItems(DataProvider.fromCallbacks(this::onAll, query -> (int) onAll(query).count()));
     }
 
-    private void onDelete(GridContextMenu.GridContextMenuItemClickEvent<UserWrapper> event) {
+    private void onDelete(
+            @NotNull GridContextMenu.GridContextMenuItemClickEvent<UserWrapper> event) {
         event.getItem().map(DeleteDialog::new).ifPresent(EnhancedDialog::open);
     }
 
-    private void onAdd(GridContextMenu.GridContextMenuItemClickEvent<UserWrapper> event) {
+    private void onAdd(@Nullable GridContextMenu.GridContextMenuItemClickEvent<UserWrapper> event) {
         new CreateDialog().open();
     }
 
-    private void onEdit(GridContextMenu.GridContextMenuItemClickEvent<UserWrapper> event) {
+    private void onEdit(@NotNull GridContextMenu.GridContextMenuItemClickEvent<UserWrapper> event) {
         event.getItem().map(EditDialog::new).ifPresent(EditDialog::open);
     }
 
-    private Stream<UserWrapper> onAll(Query<UserWrapper, Void> query) {
+    @NotNull
+    private Stream<UserWrapper> onAll(@NotNull Query<UserWrapper, Void> query) {
         try {
             return this.repo.findAll()
                 .stream()
@@ -93,7 +98,7 @@ public class UserManagement extends VerticalLayout {
         protected final CheckboxGroup<Role> rolesGroup;
         protected final UserWrapper person;
 
-        private EditDialog(UserWrapper person) {
+        private EditDialog(@NotNull UserWrapper person) {
             this.person = person;
             this.userNameField = new TextField("UserName", person.getUserName(), "");
             this.rolesGroup = new CheckboxGroup<>();
@@ -114,7 +119,7 @@ public class UserManagement extends VerticalLayout {
                     new Button("Cancel", ev -> this.close())));
         }
 
-        protected void onSave(ClickEvent<Button> event) {
+        protected void onSave(@Nullable ClickEvent<Button> event) {
             this.doUpdate(new UserWrapper(this.person.getDiscordID(), this.userNameField.getValue(),
                     this.rolesGroup.getValue()));
             UserManagement.this.grid.getDataProvider().refreshAll();
@@ -126,7 +131,7 @@ public class UserManagement extends VerticalLayout {
          *
          * @param user User to save
          */
-        private void doUpdate(UserWrapper user) {
+        private void doUpdate(@NotNull UserWrapper user) {
             try {
                 Users toSave = new Users(user.getDiscordID(), user.getUserName());
                 UserManagement.this.repo.save(toSave);
@@ -155,7 +160,7 @@ public class UserManagement extends VerticalLayout {
 
 
         @Override
-        protected void onSave(ClickEvent<Button> event) {
+        protected void onSave(@Nullable ClickEvent<Button> event) {
             Optional<Double> discordID = this.id.getOptionalValue();
             if (discordID.isEmpty()) {
                 return;
@@ -170,7 +175,7 @@ public class UserManagement extends VerticalLayout {
     private class DeleteDialog extends EnhancedDialog {
         private final UserWrapper person;
 
-        private DeleteDialog(UserWrapper person) {
+        private DeleteDialog(@NotNull UserWrapper person) {
             this.person = person;
             setContent(new Text("Are you sure you want to delete the Entry of %s?"
                 .formatted(person.getUserName())));
@@ -178,7 +183,7 @@ public class UserManagement extends VerticalLayout {
                     new Button("Cancel", e -> this.close())));
         }
 
-        private void onDelete(ClickEvent<Button> event) {
+        private void onDelete(@Nullable ClickEvent<Button> event) {
             this.doRemove(this.person);
             UserManagement.this.grid.getDataProvider().refreshAll();
             this.close();
@@ -189,7 +194,7 @@ public class UserManagement extends VerticalLayout {
          *
          * @param user User to remove
          */
-        private void doRemove(UserWrapper user) {
+        private void doRemove(@NotNull UserWrapper user) {
             try {
                 UserManagement.this.repo.delete(new Users(user.getDiscordID(), user.getUserName()));
             } catch (DatabaseException e) {

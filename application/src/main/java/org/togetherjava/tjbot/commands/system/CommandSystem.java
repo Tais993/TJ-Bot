@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.ComponentInteraction;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.togetherjava.tjbot.commands.Commands;
@@ -69,6 +70,7 @@ public final class CommandSystem extends ListenerAdapter implements SlashCommand
         }
     }
 
+    @UnmodifiableView
     @Override
     public @NotNull Collection<SlashCommand> getSlashCommands() {
         return Collections.unmodifiableCollection(nameToSlashCommands.values());

@@ -2,6 +2,8 @@ package org.togetherjava.tjbot.logwatcher.users;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -20,9 +22,11 @@ import java.util.Set;
 @Component
 public class AuthenticatedUser {
 
+    @NotNull
     private final UserRepository userRepository;
 
-    public AuthenticatedUser(UserRepository userRepository) {
+    @Contract(pure = true)
+    public AuthenticatedUser(@NotNull UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -66,6 +70,7 @@ public class AuthenticatedUser {
      *
      * @return The Optional User, should in most cases not be empty
      */
+    @NotNull
     public Users get() {
         return getAuthenticatedUser().map(this::extractID)
             .map(userRepository::findByDiscordID)
@@ -90,6 +95,7 @@ public class AuthenticatedUser {
      *
      * @return The Optional Principal of the current User
      */
+    @NotNull
     private Optional<OAuth2User> getAuthenticatedUser() {
         SecurityContext context = SecurityContextHolder.getContext();
         Object principal = context.getAuthentication().getPrincipal();
@@ -104,7 +110,8 @@ public class AuthenticatedUser {
      * @param oAuth2User Principal to map
      * @return User-Object derived from the Principal
      */
-    private Users toUser(OAuth2User oAuth2User) {
+    @Contract("_ -> new")
+    private @NotNull Users toUser(@NotNull OAuth2User oAuth2User) {
         return new Users(extractID(oAuth2User), oAuth2User.getName());
     }
 
@@ -114,7 +121,7 @@ public class AuthenticatedUser {
      * @param oAuth2User Principal with the ID
      * @return Discord-ID from the given Principal
      */
-    private long extractID(OAuth2User oAuth2User) {
+    private long extractID(@NotNull OAuth2User oAuth2User) {
         final String id = oAuth2User.getAttribute("id");
         return Long.parseLong(
                 Objects.requireNonNull(id, "ID from OAuth-User is null, this should never happen"));

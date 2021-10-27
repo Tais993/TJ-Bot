@@ -5,6 +5,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,10 +35,10 @@ import org.vaadin.artur.helpers.LaunchUtil;
 @Push
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
-    public static void main(String[] args) {
+    public static void main(String @NotNull [] args) {
         if (args.length > 1) {
             LoggerFactory.getLogger(Application.class)
-                .error("Usage: Provide a single Argument, containing the Path to the Config-File");
+                    .error("Usage: Provide a single Argument, containing the Path to the Config-File");
             System.exit(1);
         }
 

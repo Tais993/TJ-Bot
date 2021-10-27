@@ -2,6 +2,8 @@ package org.togetherjava.tjbot.logwatcher.util;
 
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 public final class NotificationUtils {
 
 
+    @Contract(pure = true)
     private NotificationUtils() {}
 
     /**
@@ -19,7 +22,7 @@ public final class NotificationUtils {
      * @param e Exception that occurred
      * @return Notification for the user
      */
-    public static Notification getNotificationForError(final Exception e) {
+    public static @NotNull Notification getNotificationForError(final @NotNull Exception e) {
         final Notification not = new Notification();
         not.setDuration((int) TimeUnit.SECONDS.toMillis(6));
         not.setPosition(Notification.Position.MIDDLE);
