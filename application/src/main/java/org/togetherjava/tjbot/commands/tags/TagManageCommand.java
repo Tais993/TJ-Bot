@@ -52,6 +52,7 @@ public final class TagManageCommand extends SlashCommandAdapter {
      *
      * @param tagSystem the system providing the actual tag data
      */
+    @Contract(pure = true)
     public TagManageCommand(@NotNull TagSystem tagSystem) {
         super("tag-manage", "Provides commands to manage all tags", SlashCommandVisibility.GUILD);
 
@@ -101,7 +102,7 @@ public final class TagManageCommand extends SlashCommandAdapter {
      * @param event the event to send messages with
      * @return the parsed message id, if successful
      */
-    private static OptionalLong parseMessageIdAndHandle(@NotNull String messageId,
+    private static @NotNull OptionalLong parseMessageIdAndHandle(@NotNull String messageId,
             @NotNull Interaction event) {
         try {
             return OptionalLong.of(Long.parseLong(messageId));

@@ -3,6 +3,7 @@ package org.togetherjava.tjbot.commands.tags;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.togetherjava.tjbot.commands.SlashCommandAdapter;
 import org.togetherjava.tjbot.commands.SlashCommandVisibility;
@@ -33,6 +34,7 @@ public final class TagsCommand extends SlashCommandAdapter {
      *
      * @param tagSystem the system providing the actual tag data
      */
+    @Contract(pure = true)
     public TagsCommand(@NotNull TagSystem tagSystem) {
         super("tags", "Displays all available tags", SlashCommandVisibility.GUILD);
 

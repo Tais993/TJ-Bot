@@ -58,7 +58,7 @@ public final class Config {
      * @return the previously loaded configuration
      */
     @Contract(pure = true)
-    public static Config getInstance() {
+    public static @NotNull Config getInstance() {
         return Objects.requireNonNull(config,
                 "can not get the configuration before it has been loaded");
     }

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.components.ButtonStyle;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,7 @@ public final class ReloadCommand extends SlashCommandAdapter {
      * @param commandProvider the provider of slash commands to reload when this command is
      *        triggered
      */
+    @Contract(pure = true)
     public ReloadCommand(@NotNull SlashCommandProvider commandProvider) {
         super("reload",
                 "Uploads all existing slash-commands to Discord so they are fully up-to-date.",

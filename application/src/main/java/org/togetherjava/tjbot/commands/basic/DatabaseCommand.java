@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ public final class DatabaseCommand extends SlashCommandAdapter {
      *
      * @param database the database to store the key-value pairs in
      */
+    @Contract(pure = true)
     public DatabaseCommand(@NotNull Database database) {
         super("db", "Storage and retrieval of key-value pairs", SlashCommandVisibility.GUILD);
         this.database = database;

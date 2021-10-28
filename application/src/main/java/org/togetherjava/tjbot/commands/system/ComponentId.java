@@ -30,10 +30,12 @@ public final class ComponentId {
      * @param commandName the name of the command that corresponds to this component ID
      * @param elements the extra elements contained in this component ID, may be empty
      */
+    @Contract(pure = true)
     public ComponentId(@NotNull String commandName, @NotNull List<String> elements) {
         this(NEXT_ID.getAndIncrement(), commandName, elements);
     }
 
+    @Contract(pure = true)
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     private ComponentId(@JsonProperty("id") int id,
             @JsonProperty("commandName") @NotNull String commandName,

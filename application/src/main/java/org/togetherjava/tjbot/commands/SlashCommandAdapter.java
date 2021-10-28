@@ -70,6 +70,7 @@ public abstract class SlashCommandAdapter implements SlashCommand {
      *        {@link CommandData#CommandData(String, String)}
      * @param visibility the visibility of the command
      */
+    @Contract(pure = true)
     protected SlashCommandAdapter(@NotNull String name, @NotNull String description,
             @NotNull SlashCommandVisibility visibility) {
         this.name = name;

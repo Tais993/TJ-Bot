@@ -17,7 +17,7 @@ import java.util.List;
  * {@link org.togetherjava.tjbot.commands.SlashCommandAdapter#generateComponentId(String...)}
  * method.
  */
-public enum ComponentIds {
+public enum  ComponentIds {
     ;
 
     private static final CsvMapper CSV = new CsvMapper();

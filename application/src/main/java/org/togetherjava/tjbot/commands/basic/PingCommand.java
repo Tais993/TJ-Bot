@@ -1,6 +1,7 @@
 package org.togetherjava.tjbot.commands.basic;
 
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.togetherjava.tjbot.commands.SlashCommandAdapter;
 import org.togetherjava.tjbot.commands.SlashCommandVisibility;
@@ -14,6 +15,7 @@ public final class PingCommand extends SlashCommandAdapter {
     /**
      * Creates an instance of the ping pong command.
      */
+    @Contract(pure = true)
     public PingCommand() {
         super("ping", "Bot responds with 'Pong!'", SlashCommandVisibility.GUILD);
     }

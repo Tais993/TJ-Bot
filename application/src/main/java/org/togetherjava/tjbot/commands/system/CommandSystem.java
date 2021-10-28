@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.ComponentInteraction;
 import net.dv8tion.jda.api.requests.ErrorResponse;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
@@ -70,7 +71,6 @@ public final class CommandSystem extends ListenerAdapter implements SlashCommand
         }
     }
 
-    @UnmodifiableView
     @Override
     public @NotNull Collection<SlashCommand> getSlashCommands() {
         return Collections.unmodifiableCollection(nameToSlashCommands.values());
@@ -186,7 +186,7 @@ public final class CommandSystem extends ListenerAdapter implements SlashCommand
         return Objects.requireNonNull(nameToSlashCommands.get(name));
     }
 
-    private static void handleRegisterErrors(Throwable ex, Guild guild) {
+    private static void handleRegisterErrors(Throwable ex, @NotNull Guild guild) {
         new ErrorHandler().handle(ErrorResponse.MISSING_ACCESS, errorResponse -> {
             // Find a channel that we have permissions to write to
             // NOTE Unfortunately, there is no better accurate way to find a proper channel

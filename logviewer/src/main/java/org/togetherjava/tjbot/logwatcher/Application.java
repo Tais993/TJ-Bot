@@ -38,7 +38,7 @@ public class Application extends SpringBootServletInitializer implements AppShel
     public static void main(String @NotNull [] args) {
         if (args.length > 1) {
             LoggerFactory.getLogger(Application.class)
-                    .error("Usage: Provide a single Argument, containing the Path to the Config-File");
+                .error("Usage: Provide a single Argument, containing the Path to the Config-File");
             System.exit(1);
         }
 

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.components.ButtonStyle;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.scilab.forge.jlatexmath.ParseException;
 import org.scilab.forge.jlatexmath.TeXConstants;
@@ -43,6 +44,7 @@ public class TeXCommand extends SlashCommandAdapter {
     /**
      * Creates a new Instance.
      */
+    @Contract(pure = true)
     public TeXCommand() {
         super("tex",
                 "This command accepts a latex expression and generates an image corresponding to it.",

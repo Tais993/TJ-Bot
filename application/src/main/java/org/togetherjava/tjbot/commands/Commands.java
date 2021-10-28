@@ -1,5 +1,6 @@
 package org.togetherjava.tjbot.commands;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.togetherjava.tjbot.commands.basic.DatabaseCommand;
@@ -35,6 +36,7 @@ public enum Commands {
      * @return a collection of all slash commands
      */
     @Unmodifiable
+    @Contract(pure = true)
     public static @NotNull Collection<SlashCommand> createSlashCommands(
             @NotNull Database database) {
         TagSystem tagSystem = new TagSystem(database);
