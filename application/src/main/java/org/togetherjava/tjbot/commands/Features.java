@@ -87,6 +87,7 @@ public enum Features {
         features.add(new RoleSelectCommand());
         features.add(new NoteCommand(actionsStore, config));
         features.add(new RemindCommand(database));
+        features.add(new WhoIsCommand());
 
         // Mixtures
         features.add(new FreeCommand(config));
