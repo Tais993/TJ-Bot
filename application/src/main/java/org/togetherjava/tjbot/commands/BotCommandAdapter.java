@@ -76,7 +76,7 @@ public abstract class BotCommandAdapter implements BotCommand {
     }
 
     @Override
-    public final @NotNull CommandData getData() {
+    public @NotNull CommandData getData() {
         return data;
     }
 
