@@ -1,17 +1,25 @@
 package org.togetherjava.tjbot.commands;
 
+import com.google.errorprone.annotations.CheckReturnValue;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.Unmodifiable;
 import org.togetherjava.tjbot.commands.componentids.ComponentId;
 import org.togetherjava.tjbot.commands.componentids.ComponentIdGenerator;
 import org.togetherjava.tjbot.commands.componentids.Lifespan;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Adapter implementation of a {@link SlashCommand}. The minimal setup only requires implementation
@@ -153,5 +161,59 @@ public abstract class SlashCommandAdapter implements SlashCommand {
             @NotNull String... args) {
         return Objects.requireNonNull(componentIdGenerator)
             .generate(new ComponentId(getName(), Arrays.asList(args)), lifespan);
+    }
+
+    /**
+     * This method copies the given {@link OptionData} for the given amount of times into a
+     * {@link List}. <br>
+     * This copies the name, and adds a number behind it.
+     *
+     * @param optionData The {@link OptionData} to copy.
+     * @param amount The amount of times to copy
+     *
+     * @return An unmodifiable {@link List} of the copied {@link OptionData OptionData's}
+     *
+     * @see #varArgOptionToList(Collection, OptionType, Function)
+     */
+    @Unmodifiable
+    protected static final @NotNull List<OptionData> generateOptionalVarArg(
+            final @NotNull OptionData optionData, @Range(from = 1, to = 25) final int amount) {
+        String optionName = optionData.getName();
+
+        return IntStream.range(0, amount)
+            .mapToObj(number -> optionName + number)
+            .map(newOptionName -> copyOptionWithNewName(optionData, newOptionName))
+            .toList();
+    }
+
+    @Contract("_, _ -> new")
+    private static @NotNull OptionData copyOptionWithNewName(@NotNull final OptionData optionData,
+            @NotNull final String newOptionName) {
+        return new OptionData(optionData.getType(), newOptionName, optionData.getDescription());
+    }
+
+    /**
+     * This method takes a {@link Collection} of {@link OptionMapping OptionMapping's}, filters it
+     * to the given {@link OptionType}. <br/>
+     * After this it maps it uses the given {@link Function}.
+     *
+     * @param varArgOptions A {@link Collection} of {@link OptionMapping OptionMapping's}.
+     * @param optionType The {@link OptionType} to filter to
+     * @param mapper The mapper {@link Function}
+     * @param <T> The type to map it to.
+     *
+     * @return A modifiable {@link List} of the given type
+     *
+     * @see #generateOptionalVarArg(OptionData, int)
+     */
+    protected static <T> List<T> varArgOptionToList(
+            final @NotNull Collection<? extends OptionMapping> varArgOptions,
+            final @NotNull OptionType optionType,
+            final @NotNull Function<? super OptionMapping, ? extends T> mapper) {
+
+        return varArgOptions.stream()
+            .filter(optionMapping -> optionMapping.getType() == optionType)
+            .map(mapper)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 }
