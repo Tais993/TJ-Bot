@@ -1,6 +1,6 @@
 package org.togetherjava.tjbot.commands.basic;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ final class PingCommandTest {
     private SlashCommand command;
 
     private @NotNull SlashCommandEvent triggerSlashCommand() {
-        SlashCommandEvent event = jdaTester.createSlashCommandEvent(command).build();
+        SlashCommandInteractionEvent event = jdaTester.createSlashCommandInteractionEvent(command).build();
         command.onSlashCommand(event);
         return event;
     }
