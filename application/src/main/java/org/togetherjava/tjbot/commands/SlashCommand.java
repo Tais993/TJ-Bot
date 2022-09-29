@@ -23,8 +23,7 @@ import java.util.List;
  * `/thread` command, this allows you to create threads using your keyboard. Try it out yourself!
  *
  * <p>
- * Represents a Discord slash-command. Mostly decorating
- * {@link Command}.
+ * Represents a Discord slash-command. Mostly decorating {@link Command}.
  * <p>
  * All slash commands have to implement this interface. For convenience, there is a
  * {@link SlashCommandAdapter} available that implemented most methods already. A new command can
